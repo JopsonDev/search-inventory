@@ -1,25 +1,37 @@
 package com.pluralsight;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class SearchInventory {
     public static void main(String[] args) {
-        ArrayList<Product> inventory = getInventory();
+        String fileName = "inventory.csv";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
-        for (Product product : inventory) {
-            System.out.println(product);
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\|");
+
+                int id = Integer.parseInt(parts[0]);
+                String name = parts[1];
+                double price = Double.parseDouble(parts[2]);
+                ArrayList<Product> inventory = getInventory(id, name, price);
+                for (Product product : inventory) {
+                    System.out.println(product);
+                }
+            }
+        } catch (Exception a) {
+            System.out.println("explosions everywhere!!!!");
         }
 
     }
 
-    public static ArrayList<Product> getInventory() {
+    public static ArrayList<Product> getInventory(int id, String name, double price) {
         ArrayList<Product> inventory = new ArrayList<>();
-        inventory.add(new Product(1234, "apple", 22.99));
-        inventory.add(new Product(2345, "time", 27.99));
-        inventory.add(new Product(3456, "ugh", 299.99));
-        inventory.add(new Product(4567, "wait here", 21.99));
-        inventory.add(new Product(5678, "top", 13.99));
-
+        inventory.add(new Product(id, name, price));
 
         return inventory;
     }
